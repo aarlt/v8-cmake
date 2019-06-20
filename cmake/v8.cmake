@@ -1,5 +1,7 @@
 include(ExternalProject)
 
+set(V8_LIBRARY ${CMAKE_BINARY_DIR}/deps/v8/out.gn/x64.release.sample/obj/${CMAKE_STATIC_LIBRARY_PREFIX}v8_monolith${CMAKE_STATIC_LIBRARY_SUFFIX})
+
 ExternalProject_Add(depot_tools
   GIT_REPOSITORY    https://chromium.googlesource.com/chromium/tools/depot_tools.git
   GIT_TAG           bc23ca13f1b3b684d9c2a127f33b618a71644829
@@ -8,6 +10,7 @@ ExternalProject_Add(depot_tools
   BUILD_COMMAND     ""
   INSTALL_COMMAND   ""
   TEST_COMMAND      ""
+  BUILD_BYPRODUCTS "${V8_LIBRARY}"
 )
 if (NOT EXISTS "${CMAKE_BINARY_DIR}/deps/v8/BUILD.gn")
   ExternalProject_Add_Step(depot_tools fetch
@@ -45,6 +48,6 @@ target_include_directories(v8 INTERFACE
     $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/deps/v8/include>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(v8 
-    INTERFACE ${CMAKE_BINARY_DIR}/deps/v8/out.gn/x64.release.sample/obj/${CMAKE_STATIC_LIBRARY_PREFIX}v8_monolith${CMAKE_STATIC_LIBRARY_SUFFIX}
+target_link_libraries(v8
+    INTERFACE ${V8_LIBRARY}
 )
